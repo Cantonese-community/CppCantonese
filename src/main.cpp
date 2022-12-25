@@ -22,7 +22,7 @@ enum msg
     default_
 };
 
-bool readFile(const char* filename, wstring &content) {
+bool readFile(const char* filename, wstring& content) {
     wchar_t linex[4096];
 
     FILE* file;
@@ -41,8 +41,8 @@ bool readFile(const char* filename, wstring &content) {
 
 void args_parse(std::string str) {
     msg temp = default_;
-    if (str == "-h" || str == "-H" || str == "-help") {temp = help;}
-    if (str == "-v" || str == "-V" || str == "-version") {temp = version;}
+    if (str == "-h" || str == "-H" || str == "-help") temp = help;
+    else if (str == "-v" || str == "-V" || str == "-version") temp = version;
     switch (temp)
     {
     case help:
@@ -58,11 +58,11 @@ void args_parse(std::string str) {
         if(result == false) break; 
         auto *source = const_cast<CAN_Char *>(code.c_str());
         cantonese::Lexer lexer(source);
-        do
-        {
-            lexer.Read().dump(wcout);
-        } while (lexer.Read().mType != TokenType::End);
-        
+        Token tk = lexer.Read();
+        while (tk.mType != TokenType::End) {
+            std::wcout << tk.to_string() << std::endl;
+            tk = lexer.Read();
+        }
         break;
     }
 }

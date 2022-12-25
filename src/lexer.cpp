@@ -4,170 +4,10 @@
 
 namespace cantonese {
 
-    bool IsSpace(CAN_Char ch){
-        return ch == _CAN_C(' ') || ch == _CAN_C('\r');
-    }
-    bool IsNumber(CAN_Char ch) {
-        return ch >= _CAN_C('0') && ch <= _CAN_C('9');
-    }
-    bool IsAlpha(CAN_Char ch) {
-        return (ch >= _CAN_C('a') && ch <= _CAN_C('z')) || (ch >= _CAN_C('A') && ch <= _CAN_C('Z'));
-    }
-    bool IsCodeChar(CAN_Char ch) {
-        return IsAlpha(ch) || ch == _CAN_C('_') || (ch >= _CAN_C('\u4e00') && ch <= _CAN_C('\u9fa5'));
-    }
-    
-    void Token::dump(Ostream &os) {
-        String name;
-        switch (mType) {
-            case TokenType::End:
-                name = _CAN_C("<End>\n");
-                break;
-            case TokenType::Delimiter:
-                name = _CAN_C("<newline>\n");
-            case TokenType::Add:
-                name = _CAN_C("+\n");
-                break;
-            case TokenType::Sub:
-                name = _CAN_C("-\n");
-                break;
-            case TokenType::Mul:
-                name = _CAN_C("*\n");
-                break;
-            case TokenType::Div:
-                name = _CAN_C("/\n");
-                break;
-            case TokenType::Identifier:
-                name = String(mStart, mLength);
-                break;
-            case TokenType::Number:
-                name = String(mStart, mLength);
-                break;
-            case TokenType::String:
-                name = String(mStart, mLength);
-                break;
-            case TokenType::Dot:
-                name = _CAN_C(".\n");
-                break;
-            case TokenType::Comma:
-                name = _CAN_C(",");
-                break;
-            case TokenType::LeftParen:
-                name = _CAN_C("(\n");
-                break;
-            case TokenType::RightParen:
-                name = _CAN_C(")\n");
-                break;
-            case TokenType::LeftBracket:
-                name = _CAN_C("[\n");
-                break;
-            case TokenType::RightBracket:
-                name = _CAN_C("]\n");
-                break;
-            case TokenType::LeftBrace:
-                name = _CAN_C("{\n");
-                break;
-            case TokenType::RightBrace:
-                name = _CAN_C("}\n");
-                break;
-            case TokenType::Increase:
-                name = _CAN_C("++\n");
-                break;
-            case TokenType::Decrease:
-                name = _CAN_C("--\n");
-                break;
-            case TokenType::Assign:
-                name = _CAN_C("=\n");
-                break;
-            case TokenType::AddAssign:
-                name = _CAN_C("+=\n");
-                break;
-            case TokenType::SubAssign:
-                name = _CAN_C("-=\n");
-                break;
-            case TokenType::MulAssign:
-                name = _CAN_C("*=\n");
-                break;
-            case TokenType::DivAssign:
-                name = _CAN_C("/=\n");
-                break;
-            case TokenType::ModAssign:
-                name = _CAN_C("%=\n");
-                break;
-            case TokenType::AndAssign:
-                name = _CAN_C("&=\n");
-                break;
-            case TokenType::OrAssign:
-                name = _CAN_C("|=\n");
-                break;
-            case TokenType::XorAssign:
-                name = _CAN_C("^=\n");
-                break;
-            case TokenType::Arrow:
-                name = _CAN_C("->\n");
-                break;
-            case TokenType::Not:
-                name = _CAN_C("!\n");
-                break;
-            case TokenType::Equal:
-                name = _CAN_C("==\n");
-                break;
-            case TokenType::NotEqual:
-                name = _CAN_C("!=\n");
-                break;
-            case TokenType::Greater:
-                name = _CAN_C(">\n");
-                break;
-            case TokenType::Less:
-                name = _CAN_C("<\n");
-                break;
-            case TokenType::GreaterEqual:
-                name = _CAN_C(">=\n");
-                break;
-            case TokenType::LessEqual:
-                name = _CAN_C("<=\n");
-                break;
-            case TokenType::Or:
-                name = _CAN_C("|\n");
-                break;
-            case TokenType::LogicOr:
-                name = _CAN_C("||\n");
-                break;
-            case TokenType::And:
-                name = _CAN_C("&\n");
-                break;
-            case TokenType::LogicAnd:
-                name = _CAN_C("&&\n");
-                break;
-            case TokenType::Mod:
-                name = _CAN_C("%\n");
-                break;
-            case TokenType::At:
-                name = _CAN_C("@\n");
-                break;
-            case TokenType::Colon:
-                name = _CAN_C(":\n");
-                break;
-            case TokenType::KeywordPrint:
-                name = _CAN_C("KeywordPrint\n");
-                break;
-            case TokenType::KeywordPrintend:
-                name = _CAN_C("KeywordPrintend\n");
-                break;
-            case TokenType::KeywordExit:
-                name = _CAN_C("KeywordExit\n");
-                break;
-            case TokenType::KeywordAssign:
-                name = _CAN_C("KeywordAssign\n");
-                break;
-            case TokenType::KeywordIs:
-                name = _CAN_C("KeywordIs\n");
-                break;
-            default:
-                name = _CAN_C("<unkown>\n");
-        }
-        os << name <<std::endl ;
-    }
+    bool IsSpace(CAN_Char ch) { return ch == _CAN_C(' ') || ch == _CAN_C('\r') || ch == _CAN_C('\n');}
+    bool IsNumber(CAN_Char ch) { return ch >= _CAN_C('0') && ch <= _CAN_C('9'); }
+    bool IsAlpha(CAN_Char ch) { return (ch >= _CAN_C('a') && ch <= _CAN_C('z')) || (ch >= _CAN_C('A') && ch <= _CAN_C('Z')); }
+    bool IsCodeChar(CAN_Char ch) { return IsAlpha(ch) || ch == _CAN_C('_') || (ch >= _CAN_C('\u4e00') && ch <= _CAN_C('\u9fa5')); }
 
     // 读取一个Token
     void Lexer::GetNextToken() {
@@ -176,9 +16,6 @@ namespace cantonese {
         // 跳过空格
         SkipSpace();
         switch (CURRENT_CHAR) {
-            case _CAN_C('\n'):
-                TOKEN(TokenType::Delimiter, CURRENT_POS, 1, CURRENT_LINE++);
-                break;
             case _CAN_C(';'):
                 TOKEN(TokenType::Delimiter, CURRENT_POS, 1, CURRENT_LINE); 
                 break;
@@ -288,10 +125,9 @@ namespace cantonese {
     }
 
     void Lexer::SkipSpace() {
-        if (IsSpace(CURRENT_CHAR)){
-            do {
-                NEXT();
-            } while (IsSpace(CURRENT_CHAR));
+        while (IsSpace(CURRENT_CHAR)){
+            if (CURRENT_CHAR == _CAN_C('\n')) CURRENT_LINE++;
+            NEXT();
         }
     }
 
@@ -324,13 +160,12 @@ namespace cantonese {
 
     void Lexer::ParseString() {
         TOKEN(TokenType::String, CURRENT_POS, 0, CURRENT_LINE);
-        while (CURRENT_CHAR != _CAN_C('"')) {
-            if (CURRENT_CHAR == L'\n') {
-                CURRENT_LINE++;
-            }
+        do {
             NEXT();
-        }
-        TOKEN_LENGTH((CAN_UINT32)(CURRENT_POS - TOKEN_START));
+            if (CURRENT_CHAR == _CAN_C('\n')) CURRENT_LINE++;
+        } while (CURRENT_CHAR != _CAN_C('"'));
+        NEXT();
+        TOKEN_LENGTH((CAN_UINT32)(CURRENT_POS - TOKEN_START + 1));
     }
     
     void Lexer::ParseIdentifier() {
@@ -339,7 +174,7 @@ namespace cantonese {
             NEXT();
         } while (IsCodeChar(CURRENT_CHAR) || IsNumber(CURRENT_CHAR));
         TOKEN_LENGTH((CAN_UINT32)(CURRENT_POS - TOKEN_START));
-        CAN_Char identifierBuffer[255] = {_CAN_C('\0')};
+        CAN_Char identifierBuffer[255] = {_CAN_C('\0')}; // init the buffer with the end char '\0'
         memcpy(identifierBuffer, mCurrentToken.mStart, mCurrentToken.mLength * sizeof(CAN_Char));
         TokenType tok = CANKeywords[identifierBuffer];
         if (tok != TokenType::End) {
@@ -359,8 +194,7 @@ namespace cantonese {
         return CURRENT_TOKEN;
     }
 
-    Lexer::Lexer(CAN_Char *mSource) : mSource(mSource) {
-    }
+    Lexer::Lexer(CAN_Char *mSource) : mSource(mSource) {}
 
     TokenType Lexer::ReadTokenType() {
         GetNextToken();
@@ -382,9 +216,9 @@ namespace cantonese {
             GetNextToken();
     }
 
-    Token::Token(TokenType mType, const CAN_Char *mStart, CAN_UINT32 mLength, CAN_UINT32 mLine) : mType(mType),
-                                                                                            mStart(mStart),
-                                                                                            mLength(mLength),
-                                                                                            mLine(mLine) {
-    }
+    Token::Token(TokenType mType, const CAN_Char *mStart, CAN_UINT32 mLength, CAN_UINT32 mLine) : 
+        mType(mType),
+        mStart(mStart),
+        mLength(mLength),
+        mLine(mLine) {}
 }
