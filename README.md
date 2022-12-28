@@ -3,7 +3,7 @@ The Cantonese programming language interpreter in C++
 
 # Make
 ```
-g++ main.cpp lexer.cpp -std=c++11 -fexec-charset=gbk -finput-charset=utf-8
+g++ main.cpp lexer.cpp ast.cpp -std=c++14 -fexec-charset=gbk -finput-charset=utf-8
 ```
 
 # Note

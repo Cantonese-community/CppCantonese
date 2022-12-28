@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <clocale>
-#include "lexer.hpp"
+#include "ast.hpp"
 
 using namespace cantonese;
 using namespace std;
@@ -57,12 +57,15 @@ void args_parse(std::string str) {
         bool result = readFile(filename, code);
         if(result == false) break; 
         auto *source = const_cast<CAN_Char *>(code.c_str());
+        vector<Token> TokenList;
         cantonese::Lexer lexer(source);
         Token tk = lexer.Read();
+        TokenList.push_back(tk);
         while (tk.mType != TokenType::End) {
             std::wcout << tk.to_string() << std::endl;
             tk = lexer.Read();
         }
+        Ast::Parser parser(TokenList);
         break;
     }
 }

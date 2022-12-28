@@ -64,9 +64,13 @@ namespace cantonese {
 
             std::wstring to_string() {
                 CAN_Char tokeninfo[255] = {_CAN_C('\0')};
-                std::cout << (int)mType << " ";
+                // std::cout << (int)mType << " ";
                 memcpy(tokeninfo, this->mStart, this->mLength * sizeof(CAN_Char));
                 return tokeninfo;
+            }
+
+            TokenType getTokenType() {
+                return mType;
             }
 
         Token(TokenType mType, const CAN_Char *mStart, CAN_UINT32 mLength, CAN_UINT32 mLine);
