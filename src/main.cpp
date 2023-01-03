@@ -26,7 +26,7 @@ bool readFile(const char* filename, wstring& content) {
     wchar_t linex[4096];
 
     FILE* file;
-    file = fopen(filename, "rt+,ccs=UTF-8");
+    fopen_s(&file, filename, "rt+,ccs=UTF-8");
     if (file == NULL) {
         puts("打唔开你份文件!");
         return false;

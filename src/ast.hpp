@@ -30,11 +30,12 @@ namespace Ast {
             StringExprAST(std::wstring Val) : Val(Val) {}
     };
 
+    // Expression class for referencing a variable. 
     class VariableExprAST : public ExprAST {
-        std::string Name;
+        std::wstring Name;
 
         public:
-            VariableExprAST(const std::string& Name) : Name(Name) {}
+            VariableExprAST(const std::wstring& Name) : Name(Name) {}
     };
 
     class BinaryExprAST : public ExprAST {
@@ -58,13 +59,13 @@ namespace Ast {
     };
 
     class PrototypeAST {
-        std::string Name;
-        std::vector<std::string> Args;
+        std::wstring Name;
+        std::vector<std::wstring> Args;
         public:
-            PrototypeAST(const std::string& name, std::vector<std::string> Args) :
+            PrototypeAST(const std::wstring& name, std::vector<std::wstring> Args) :
                 Name(name),
                 Args(std::move(Args)) {}
-            const std::string& getName() const {return Name;}
+            const std::wstring& getName() const {return Name;}
     };
 
     class FunctionAST {

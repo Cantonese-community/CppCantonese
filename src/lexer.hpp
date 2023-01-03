@@ -51,7 +51,8 @@ namespace cantonese {
         {_CAN_C("系"), TokenType::KeywordIs},
         {_CAN_C("係"), TokenType::KeywordIs},
         {_CAN_C("嘅话"), TokenType::KeywordThen},
-        {_CAN_C("掟个"), TokenType::KeywordRaise}
+        {_CAN_C("掟个"), TokenType::KeywordRaise},
+        {_CAN_C("下"), TokenType::KeywordCallBegin}
     };
 
     
@@ -64,7 +65,6 @@ namespace cantonese {
 
             std::wstring to_string() {
                 CAN_Char tokeninfo[255] = {_CAN_C('\0')};
-                // std::cout << (int)mType << " ";
                 memcpy(tokeninfo, this->mStart, this->mLength * sizeof(CAN_Char));
                 return tokeninfo;
             }
@@ -73,7 +73,7 @@ namespace cantonese {
                 return mType;
             }
 
-        Token(TokenType mType, const CAN_Char *mStart, CAN_UINT32 mLength, CAN_UINT32 mLine);
+        Token(TokenType mType, const CAN_Char* mStart, CAN_UINT32 mLength, CAN_UINT32 mLine);
         Token() = default;
     };
 

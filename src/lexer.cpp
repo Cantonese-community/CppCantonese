@@ -40,6 +40,9 @@ namespace cantonese {
             case _CAN_C('.'):
                 TOKEN(TokenType::Dot, CURRENT_POS, 1, CURRENT_LINE);
                 break;
+            case _CAN_C('|'):
+                TOKEN(TokenType::Or, CURRENT_POS, 1, CURRENT_CHAR);
+                break;
             case _CAN_C('!'):
                 if (NEXT_CHAR == _CAN_C('=')) {
                     TOKEN(TokenType::NotEqual, CURRENT_POS, 2, CURRENT_LINE);  // != not equal 不相等
@@ -69,13 +72,13 @@ namespace cantonese {
                 break;
             case _CAN_C('-'):
                 if (NEXT_CHAR == _CAN_C('-')) { // --
-                    TOKEN(TokenType::Decrease, CURRENT_POS, 1, CURRENT_LINE); // 自减
+                    TOKEN(TokenType::Decrease, CURRENT_POS, 2, CURRENT_LINE); // 自减
                     NEXT();
                 } else if (NEXT_CHAR == _CAN_C('=')) { // -=
-                    TOKEN(TokenType::SubAssign, CURRENT_POS, 1, CURRENT_LINE);
+                    TOKEN(TokenType::SubAssign, CURRENT_POS, 2, CURRENT_LINE);
                     NEXT();
                 } else if (NEXT_CHAR == _CAN_C('>')) { // -> Arrow 箭头
-                    TOKEN(TokenType::Arrow, CURRENT_POS, 1, CURRENT_LINE);
+                    TOKEN(TokenType::Arrow, CURRENT_POS, 2, CURRENT_LINE);
                     NEXT();
                 } else {
                     TOKEN(TokenType::Sub, CURRENT_POS, 1, CURRENT_LINE); // -
@@ -165,7 +168,7 @@ namespace cantonese {
             if (CURRENT_CHAR == _CAN_C('\n')) CURRENT_LINE++;
         } while (CURRENT_CHAR != _CAN_C('"'));
         NEXT();
-        TOKEN_LENGTH((CAN_UINT32)(CURRENT_POS - TOKEN_START + 1));
+        TOKEN_LENGTH((CAN_UINT32)(CURRENT_POS - TOKEN_START));
     }
     
     void Lexer::ParseIdentifier() {
