@@ -1,4 +1,5 @@
 #include "ast.hpp"
+#include <iostream>
 
 namespace Ast {
     cantonese::Token Parser::getNextToken() {
@@ -104,15 +105,18 @@ namespace Ast {
         return std::make_unique<PrototypeAST>(FnName, std::move(ArgNames));
     }
 
+    // expression
+    // ::= primary binoprhs
     std::unique_ptr<ExprAST> Parser::ParseExpression() {
-        // TODO
-        return nullptr;
+        auto LHS = ParsePrimary();
+        if (!LHS) return nullptr;
+        return ParseBinOpRHS(0, std::move(LHS));
     }
 
 
     // identifierexpr
     //  ::= identifier
-    //  ::= identifier 下 -> '|' expression* '|'
+    //  ::= identifier 下 -> '|' {expression} '|'
     std::unique_ptr<ExprAST> Parser::ParseIdentifierExpr() {
         std::wstring IdName = CurTok.to_string();
         getNextToken(); // Skip the identifier
@@ -120,15 +124,67 @@ namespace Ast {
             // Simple variable ref
             return std::make_unique<VariableExprAST>(IdName);
         }
+
         // Call
         getNextToken(); // Skip the KeywordCallBegin.
+        getNextToken(); // Skip the '->'
         std::vector<std::unique_ptr<ExprAST>> Args;
 
+        if (CurTok.mType != TokenType::Or) {
+            return LogError("Expected '|' in function_call-expr. ");
+        }
+
+        getNextToken(); // Skip the '|'
+
+        if (CurTok.mType != TokenType::Or) {
+            return LogError("Expected '|' in function_call-expr. ");
+        }
+
+        getNextToken(); // Skip the '|'
+       
         return nullptr;
     }
 
-    std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS) {
-        // TODO
-        return nullptr;
+
+    // binoprhs
+    // ::= (op primary)*
+    std::unique_ptr<ExprAST> Parser::ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS) {
+        // If this is a binop, find its precedence.
+        while (true) {
+            int TokPrec = getTokPrecedence();
+
+            if (TokPrec < ExprPrec) return LHS;
+            TokenType BinOp = CurTok.mType;
+            getNextToken(); // skip binop
+
+            // Parse the primary expression after the binary operator.
+            auto RHS = ParsePrimary();
+            if (!RHS) {
+                return nullptr;
+            }
+
+            int NextPrec = getTokPrecedence();
+            if (TokPrec < NextPrec) {
+                RHS = ParseBinOpRHS(TokPrec + 1, std::move(RHS));
+                if (!RHS) return nullptr;
+            }
+
+            LHS = std::make_unique<BinaryExprAST>(BinOp, std::move(LHS), std::move(RHS));
+        }
+        // return nullptr;
+    }
+
+    void Parser::parse() {
+        // while (index < TokenList.size()) {
+            switch (CurTok.mType)
+            {
+                case TokenType::End:
+                    return;
+        
+                default:
+                    auto E = ParseExpression();
+                    break;
+            }
+        // }
     }
 }

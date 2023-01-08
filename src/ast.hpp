@@ -39,11 +39,11 @@ namespace Ast {
     };
 
     class BinaryExprAST : public ExprAST {
-        char Op;
+        TokenType Op;
         std::unique_ptr<ExprAST> LHS;
         std::unique_ptr<ExprAST> RHS;
         public:
-            BinaryExprAST(char Op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS) :
+            BinaryExprAST(TokenType Op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS) :
             Op(Op),
             LHS(std::move(LHS)),
             RHS(std::move(RHS))    
@@ -122,7 +122,11 @@ namespace Ast {
                     {'-', 20},
                     {'*', 40}
                 };
+                this->TokenList = TokenList;
+                this->CurTok = this->TokenList[index];
             }
+
+            void parse();
     };
 }
 

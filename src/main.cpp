@@ -62,10 +62,12 @@ void args_parse(std::string str) {
         Token tk = lexer.Read();
         TokenList.push_back(tk);
         while (tk.mType != TokenType::End) {
-            std::wcout << tk.to_string() << std::endl;
             tk = lexer.Read();
+            TokenList.push_back(tk);
         }
+
         Ast::Parser parser(TokenList);
+        parser.parse();
         break;
     }
 }
